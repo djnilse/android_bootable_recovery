@@ -412,22 +412,21 @@ int confirm_selection(const char* title, const char* confirm)
         return 1;
 
     char* confirm_headers[]  = {  title, "  THIS CAN NOT BE UNDONE.", "", NULL };
+    if (0 == stat("/sdcard/clockworkmod/.one_confirm", &info)) {
     char* items[] = { "No",
-                      "No",
-                      "No",
-                      "No",
-                      "No",
-                      "No",
-                      "No",
-                      confirm, //" Yes -- wipe partition",   // [7
-                      "No",
-                      "No",
-                      "No",
-                      NULL };
-
+            confirm, //" Yes -- wipe partition",   // [1]
+            NULL };
     int chosen_item = get_menu_selection(confirm_headers, items, 0, 0);
-    return chosen_item == 7;
-}
+    return chosen_item == 1;
+  }
+  else {
+    char* items[] = { "No",
+            confirm, //" Yes -- wipe partition",   // [1]
+            NULL };
+    int chosen_item = get_menu_selection(confirm_headers, items, 0, 0);
+    return chosen_item == 1;
+  }
+  }
 
 #define MKE2FS_BIN      "/sbin/mke2fs"
 #define TUNE2FS_BIN     "/sbin/tune2fs"
@@ -896,12 +895,10 @@ void show_advanced_menu()
                             "Report Error",
                             "Key Test",
                             "Show log",
-#ifndef BOARD_HAS_SMALL_RECOVERY
                             "Partition SD Card",
                             "Fix Permissions",
 #ifdef BOARD_HAS_SDCARD_INTERNAL
                             "Partition Internal SD Card",
-#endif
 #endif
                             NULL
     };
@@ -976,8 +973,14 @@ void show_advanced_menu()
             }
             case 6:
             {
-                static char* ext_sizes[] = { "128M",
-                                             "256M",
+                static char* ext_fs[] = { "ext2",
+                                          "ext3",
+                                          "ext4",
+                                          NULL };
+
+		 static char* ext_sizes[] = { "0M",
+                                             "128M",
+					     "256M",
                                              "512M",
                                              "1024M",
                                              "2048M",
@@ -990,9 +993,14 @@ void show_advanced_menu()
                                               "128M",
                                               "256M",
                                               NULL };
-
+					      
+		static char* ext_fs_headers[] = { "Ext File System", "", NULL };
                 static char* ext_headers[] = { "Ext Size", "", NULL };
                 static char* swap_headers[] = { "Swap Size", "", NULL };
+		
+		int ext_fs_selected = get_menu_selection(ext_fs_headers, ext_fs, 0, 0);
+                if (ext_fs_selected == GO_BACK)
+                    return;
 
                 int ext_size = get_menu_selection(ext_headers, ext_sizes, 0, 0);
                 if (ext_size == GO_BACK)
@@ -1009,7 +1017,7 @@ void show_advanced_menu()
                 sddevice[strlen("/dev/block/mmcblkX")] = NULL;
                 char cmd[PATH_MAX];
                 setenv("SDPATH", sddevice, 1);
-                sprintf(cmd, "sdparted -es %s -ss %s -efs ext3 -s", ext_sizes[ext_size], swap_sizes[swap_size]);
+                sprintf(cmd, "sdparted -es %s -ss %s -efs %s -s", ext_sizes[ext_size], swap_sizes[swap_size], ext_fs[ext_fs_selected]);
                 ui_print("Partitioning SD Card... please wait...\n");
                 if (0 == __system(cmd))
                     ui_print("Done!\n");
@@ -1028,7 +1036,13 @@ void show_advanced_menu()
             }
             case 8:
             {
-                static char* ext_sizes[] = { "128M",
+                static char* ext_fs[] = { "ext2",
+                                          "ext3",
+                                          "ext4",
+                                          NULL };
+					       
+		static char* ext_sizes[] = { "0M",
+                                             "128M",       
                                              "256M",
                                              "512M",
                                              "1024M",
@@ -1043,10 +1057,15 @@ void show_advanced_menu()
                                               "256M",
                                               NULL };
 
+		static char* ext_fs_headers[] = { "Ext File System", "", NULL };
                 static char* ext_headers[] = { "Data Size", "", NULL };
                 static char* swap_headers[] = { "Swap Size", "", NULL };
 
-                int ext_size = get_menu_selection(ext_headers, ext_sizes, 0, 0);
+                int ext_fs_selected = get_menu_selection(ext_fs_headers, ext_fs, 0, 0);
+                if (ext_fs_selected == GO_BACK)
+                    return;
+
+		int ext_size = get_menu_selection(ext_headers, ext_sizes, 0, 0);
                 if (ext_size == GO_BACK)
                     continue;
 
@@ -1061,7 +1080,7 @@ void show_advanced_menu()
                 sddevice[strlen("/dev/block/mmcblkX")] = NULL;
                 char cmd[PATH_MAX];
                 setenv("SDPATH", sddevice, 1);
-                sprintf(cmd, "sdparted -es %s -ss %s -efs ext3 -s", ext_sizes[ext_size], swap_sizes[swap_size]);
+                sprintf(cmd, "sdparted -es %s -ss %s -efs %s -s", ext_sizes[ext_size], swap_sizes[swap_size], ext_fs[ext_fs_selected]);
                 ui_print("Partitioning Internal SD Card... please wait...\n");
                 if (0 == __system(cmd))
                     ui_print("Done!\n");
