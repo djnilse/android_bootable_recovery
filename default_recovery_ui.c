@@ -37,15 +37,15 @@ int TOUCH_CONTROL_DEBUG = 0;
 	check the values returned by on screen touch output by click on the 
 	touch panel extremeties
 */
-int maxX=480;		//Set to 0 for debugging
-int maxY=800;		//Set to 0 for debugging
+int maxX=1690;		//Set to 0 for debugging
+int maxY=2534;		//Set to 0 for debugging
 
 /*
 	the values of following two variables are dependent on specifc device resolution
 	and can be obtained using the outputs of the gr_fb functions
 */
-int resX=480;		//Value obtained from function 'gr_fb_width()'
-int resY=800;		//Value obtained from function 'gr_fb_height()'
+int resX=320;		//Value obtained from function 'gr_fb_width()'
+int resY=480;		//Value obtained from function 'gr_fb_height()'
 
 char* MENU_HEADERS[] = { NULL };
 
@@ -64,7 +64,7 @@ int device_recovery_start() {
     return 0;
 }
 
-int device_toggle_display(volatile char* key_pressed, int key_code) {
+/*int device_toggle_display(volatile char* key_pressed, int key_code) {
     int alt = key_pressed[KEY_LEFTALT] || key_pressed[KEY_RIGHTALT];
     if (alt && key_code == KEY_L)
         return 1;
@@ -74,7 +74,7 @@ int device_toggle_display(volatile char* key_pressed, int key_code) {
         //return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_MENU || key_code == KEY_END);
     }
     return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_MENU || key_code == KEY_POWER || key_code == KEY_END);
-}
+}*/
 
 int device_reboot_now(volatile char* key_pressed, int key_code) {
     return 0;
@@ -86,13 +86,12 @@ int device_handle_key(int key_code, int visible) {
             case KEY_CAPSLOCK:
             case KEY_DOWN:
             case KEY_VOLUMEDOWN:
-            case KEY_MENU:
+			case KEY_MENU:
                 return HIGHLIGHT_DOWN;
 
             case KEY_LEFTSHIFT:
             case KEY_UP:
             case KEY_VOLUMEUP:
-            case KEY_HOME:
                 return HIGHLIGHT_UP;
 
             case KEY_POWER:
@@ -109,6 +108,7 @@ int device_handle_key(int key_code, int visible) {
             case KEY_CAMERA:
             case KEY_F21:
             case KEY_SEND:
+	        case KEY_HOME:
                 return SELECT_ITEM;
             
             case KEY_END:
