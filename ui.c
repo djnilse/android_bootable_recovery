@@ -51,17 +51,17 @@ static int gShowBackButton = 0;
 #endif
 
 #define MAX_COLS 96
-#define MAX_ROWS 32
+#define MAX_ROWS 26 //standart is 32
 
 #define MENU_MAX_COLS 64
-#define MENU_MAX_ROWS 250
+#define MENU_MAX_ROWS 250 //standart is 250
 
 #ifndef BOARD_LDPI_RECOVERY
   #define CHAR_WIDTH 10
   #define CHAR_HEIGHT 18
 #else
-  #define CHAR_WIDTH 7
-  #define CHAR_HEIGHT 16
+  #define CHAR_WIDTH 7 //standart is 7
+  #define CHAR_HEIGHT 16 //standart is 16
 #endif
 
 #define PROGRESSBAR_INDETERMINATE_STATES 6
@@ -572,12 +572,12 @@ static void *input_thread(void *cookie)
         }
         pthread_mutex_unlock(&key_queue_mutex);
 
-        if (ev.value > 0 && device_toggle_display(key_pressed, ev.code)) {
+        /*if (ev.value > 0 && device_toggle_display(key_pressed, ev.code)) {
             pthread_mutex_lock(&gUpdateMutex);
             show_text = !show_text;
             update_screen_locked();
             pthread_mutex_unlock(&gUpdateMutex);
-        }
+        }*/
 
         if (ev.value > 0 && device_reboot_now(key_pressed, ev.code)) {
             reboot(RB_AUTOBOOT);
