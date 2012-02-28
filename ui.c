@@ -51,7 +51,7 @@ static int gShowBackButton = 0;
 #endif
 
 #define MAX_COLS 96
-#define MAX_ROWS 28  //32 ars fix text overlapping
+#define MAX_ROWS 27  //32 ars fix text overlapping
 
 #define MENU_MAX_COLS 64
 #define MENU_MAX_ROWS 250
