@@ -59,11 +59,12 @@ $(foreach board_define,$(BOARD_RECOVERY_DEFINES), \
 LOCAL_MODULE_TAGS := eng
 
 LOCAL_STATIC_LIBRARIES :=
-ifeq ($(BOARD_CUSTOM_RECOVERY_KEYMAPPING),)
-  LOCAL_SRC_FILES += default_recovery_ui.c
-else
-  LOCAL_SRC_FILES += $(BOARD_CUSTOM_RECOVERY_KEYMAPPING)
-endif
+LOCAL_SRC_FILES += default_recovery_ui.c
+#ifeq ($(BOARD_CUSTOM_RECOVERY_KEYMAPPING),)			#outcommanded to specially 
+#  LOCAL_SRC_FILES += default_recovery_ui.c			#use the local default_recovery_ui.c
+#else
+#  LOCAL_SRC_FILES += $(BOARD_CUSTOM_RECOVERY_KEYMAPPING)
+#endif
 
 LOCAL_STATIC_LIBRARIES += librebootrecovery
 LOCAL_STATIC_LIBRARIES += libext4_utils libz
