@@ -37,7 +37,7 @@ int TOUCH_CONTROL_DEBUG = 0;
 	check the values returned by on screen touch output by click on the 
 	touch panel extremeties
 */
-int maxX=1690;		//Set to 0 for debugging
+int maxX=1689;		//Set to 0 for debugging
 int maxY=2534;		//Set to 0 for debugging
 
 /*
