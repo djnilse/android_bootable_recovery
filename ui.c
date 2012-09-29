@@ -572,12 +572,12 @@ static void *input_thread(void *cookie)
         }
         pthread_mutex_unlock(&key_queue_mutex);
 
-        if (ev.value > 0 && device_toggle_display(key_pressed, ev.code)) {
+        /*if (ev.value > 0 && device_toggle_display(key_pressed, ev.code)) {
             pthread_mutex_lock(&gUpdateMutex);
             show_text = !show_text;
             update_screen_locked();
             pthread_mutex_unlock(&gUpdateMutex);
-        }
+        }*/
 
         if (ev.value > 0 && device_reboot_now(key_pressed, ev.code)) {
             reboot(RB_AUTOBOOT);
